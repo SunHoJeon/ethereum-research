@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이더리움 토크노믹스 | 전선호</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+KR:wght@300;400;600&display=swap');
+
+:root {
+  --bg: #080c14;
+  --bg2: #0d1220;
+  --bg3: #131926;
+  --card: #0f1520;
+  --accent: #627eea;
+  --accent2: #a78bfa;
+  --gold: #f0a500;
+  --text: #e4e8f4;
+  --text2: #7a8199;
+  --text3: #3e4560;
+  --border: #1a2038;
+  --green: #4ade80;
+  --red: #f87171;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 300;
+  line-height: 1.85;
+  overflow-x: hidden;
+}
+
+/* ─── 히어로 ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px 72px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero-bg-text {
+  position: absolute;
+  right: -20px;
+  bottom: -40px;
+  font-family: 'DM Serif Display', serif;
+  font-size: min(30vw, 360px);
+  color: rgba(98,126,234,0.035);
+  pointer-events: none;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  user-select: none;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(98,126,234,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(98,126,234,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at 20% 80%, black 30%, transparent 70%);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(98,126,234,0.08);
+  border: 1px solid rgba(98,126,234,0.25);
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  width: fit-content;
+}
+
+.badge-dot {
+  width: 5px; height: 5px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%,100% { opacity:1; }
+  50% { opacity:0.3; }
+}
+
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(44px, 7vw, 96px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  margin-bottom: 20px;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-desc {
+  font-size: 15px;
+  color: var(--text2);
+  max-width: 520px;
+  margin-bottom: 56px;
+  line-height: 1.7;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+  padding-top: 32px;
+}
+
+.meta-item { display: flex; flex-direction: column; gap: 4px; }
+
+.meta-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text3);
+}
+
+.meta-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--text);
+}
+
+/* ─── 네비 ─── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8,12,20,0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 72px;
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+nav::-webkit-scrollbar { display: none; }
+
+nav a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  text-decoration: none;
+  padding: 18px 18px;
+  white-space: nowrap;
+  transition: color 0.2s;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ─── 섹션 ─── */
+section {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 96px 72px;
+}
+
+.sec-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.sec-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(28px, 3.5vw, 52px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.sec-title em { font-style: italic; color: var(--accent); }
+
+.rule {
+  height: 1px;
+  background: linear-gradient(to right, rgba(98,126,234,0.6), transparent);
+  margin-bottom: 44px;
+}
+
+.prose {
+  font-size: 15px;
+  color: var(--text2);
+  line-height: 1.9;
+  max-width: 680px;
+  margin-bottom: 20px;
+}
+
+.prose strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ─── 키 스탯 그리드 ─── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 40px 0;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px 24px 20px;
+  transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--accent), var(--accent2));
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.stat-card:hover { border-color: rgba(98,126,234,0.35); transform: translateY(-2px); }
+.stat-card:hover::before { opacity: 1; }
+
+.stat-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.stat-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+
+.stat-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+/* ─── 비교 테이블 ─── */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 36px 0;
+}
+
+.cmp-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 26px;
+}
+
+.cmp-card.on {
+  border-color: rgba(98,126,234,0.35);
+  background: rgba(98,126,234,0.05);
+}
+
+.cmp-head {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text3);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cmp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+.cmp-row:last-child { border-bottom: none; }
+
+.cmp-k { font-size: 12px; color: var(--text2); }
+.cmp-v {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.pos { color: var(--green); }
+.neg { color: var(--red); }
+.neu { color: var(--text); }
+
+/* ─── 에르고노믹스 매트릭스 ─── */
+.matrix {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 36px 0;
+}
+
+.matrix-cell {
+  background: var(--card);
+  padding: 16px 20px;
+  font-size: 12px;
+}
+
+.matrix-cell.head {
+  background: rgba(98,126,234,0.1);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+}
+
+.matrix-cell.feature { color: var(--text2); }
+.matrix-cell.human { color: var(--red); }
+.matrix-cell.agent { color: var(--green); font-weight: 600; }
+
+/* ─── B2C 플로우 ─── */
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 36px 0;
+  flex-wrap: wrap;
+}
+
+.flow-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+}
+
+.flow-item.active {
+  border-color: rgba(98,126,234,0.5);
+  background: rgba(98,126,234,0.08);
+}
+
+.flow-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.flow-desc { font-size: 10px; color: var(--text3); line-height: 1.4; }
+
+.flow-arrow {
+  color: var(--text3);
+  font-size: 18px;
+  padding: 0 8px;
+  flex-shrink: 0;
+}
+
+/* ─── 기술 카드 ─── */
+.tech-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 36px 0;
+}
+
+.tech-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-card::after {
+  content: '';
+  position: absolute;
+  bottom: -50px; right: -50px;
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(98,126,234,0.12), transparent 70%);
+  pointer-events: none;
+}
+
+.tech-tag {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  background: rgba(98,126,234,0.1);
+  border: 1px solid rgba(98,126,234,0.2);
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin-bottom: 14px;
+}
+
+.tech-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.tech-desc { font-size: 13px; color: var(--text2); line-height: 1.75; }
+
+/* ─── 풀 배너 ─── */
+.banner {
+  background: linear-gradient(135deg, rgba(98,126,234,0.1) 0%, rgba(167,139,250,0.06) 100%);
+  border-top: 1px solid rgba(98,126,234,0.15);
+  border-bottom: 1px solid rgba(98,126,234,0.15);
+  padding: 72px;
+  text-align: center;
+}
+
+.banner-quote {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(20px, 2.8vw, 36px);
+  line-height: 1.45;
+  color: var(--text);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.banner-quote em { color: var(--accent); font-style: italic; }
+
+/* ─── 결론 박스 ─── */
+.conclusion {
+  background: var(--bg3);
+  border: 1px solid rgba(98,126,234,0.25);
+  border-radius: 14px;
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+  margin: 36px 0;
+}
+
+.conclusion::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--accent), var(--accent2), var(--gold));
+}
+
+.conclusion .prose { max-width: 100%; }
+
+/* ─── 플라이휠 ─── */
+.flywheel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 36px 0;
+  position: relative;
+}
+
+.flywheel::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 24px;
+  bottom: 24px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent), rgba(98,126,234,0.1));
+}
+
+.fw-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.fw-dot {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(98,126,234,0.15);
+  border: 1px solid rgba(98,126,234,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.fw-body { padding-top: 8px; }
+.fw-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.fw-desc { font-size: 13px; color: var(--text2); line-height: 1.65; }
+
+/* ─── 푸터 ─── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 36px 72px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-l, .footer-r {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+}
+
+/* ─── 애니 ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.show { opacity: 1; transform: none; }
+
+@media (max-width: 700px) {
+  .hero, section, nav, .banner, footer { padding-left: 24px; padding-right: 24px; }
+  .compare, .tech-grid { grid-template-columns: 1fr; }
+  .matrix { grid-template-columns: 1fr; }
+  .flow { flex-direction: column; }
+  .flow-arrow { transform: rotate(90deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- ── 히어로 ── -->
+<div class="hero">
+  <div class="hero-bg-text">ETH</div>
+  <div class="hero-grid"></div>
+  <div class="badge"><span class="badge-dot"></span>Research · 지원자: 전선호</div>
+  <h1>이더리움,<br><em>가장 발전된</em><br>토크노믹스</h1>
+  <p class="hero-desc">
+    비트코인 맥시멀리스트들의 논리도, 솔라나의 속도도 무시할 수 없다.
+    그럼에도 이더리움을 선택했다. AI 에이전트 경제에서 ETH가
+    필연적으로 수요를 받을 수밖에 없는 구조로 설계되어 있기 때문이다.
+  </p>
+  <div class="hero-meta">
+    <div class="meta-item"><span class="meta-label">Subject</span><span class="meta-value">Ethereum Tokenomics</span></div>
+    <div class="meta-item"><span class="meta-label">Focus</span><span class="meta-value">Agent Economy</span></div>
+    <div class="meta-item"><span class="meta-label">Author</span><span class="meta-value">전선호</span></div>
+    <div class="meta-item"><span class="meta-label">Date</span><span class="meta-value">2026.06</span></div>
+  </div>
+</div>
+
+<!-- ── 네비 ── -->
+<nav>
+  <a href="#eip1559">EIP-1559</a>
+  <a href="#flywheel">플라이휠</a>
+  <a href="#agent">에이전트</a>
+  <a href="#ergonomics">에르고노믹스</a>
+  <a href="#b2a">B2A → A2A</a>
+  <a href="#puzzle">ERC-8126 · x402</a>
+  <a href="#gap">가격과 가치</a>
+  <a href="#conclusion">결론</a>
+</nav>
+
+<!-- ── 1. EIP-1559 ── -->
+<section id="eip1559">
+  <div class="sec-label">I. 토크노믹스의 출발점</div>
+  <h2 class="sec-title">수요와 소각이<br><em>연결된</em> 구조</h2>
+  <div class="rule"></div>
+
+  <p class="prose">
+    이더리움 토크노믹스를 이해하는 첫 번째 열쇠는 <strong>EIP-1559</strong>다.
+    2021년 도입된 이 업그레이드는 트랜잭션 수수료 구조를 근본적으로 바꿨다.
+    기존에는 모든 수수료가 채굴자에게 돌아갔지만, EIP-1559 이후부터는
+    기본 수수료(base fee)가 자동으로 소각된다. 네트워크 사용량이 늘어날수록
+    더 많은 ETH가 사라지는 구조다.
+  </p>
+
+  <div class="compare reveal">
+    <div class="cmp-card">
+      <div class="cmp-head">EIP-1559 이전</div>
+      <div class="cmp-row"><span class="cmp-k">수수료 구조</span><span class="cmp-v neg">전액 채굴자 수령</span></div>
+      <div class="cmp-row"><span class="cmp-k">공급 효과</span><span class="cmp-v neg">지속 인플레이션</span></div>
+      <div class="cmp-row"><span class="cmp-k">가격 예측성</span><span class="cmp-v neg">낮음 (경매)</span></div>
+      <div class="cmp-row"><span class="cmp-k">수혜자</span><span class="cmp-v neu">채굴자</span></div>
+    </div>
+    <div class="cmp-card on">
+      <div class="cmp-head">EIP-1559 이후</div>
+      <div class="cmp-row"><span class="cmp-k">수수료 구조</span><span class="cmp-v pos">Base fee 소각 + 팁 분리</span></div>
+      <div class="cmp-row"><span class="cmp-k">공급 효과</span><span class="cmp-v pos">수요 증가 → 소각 증가</span></div>
+      <div class="cmp-row"><span class="cmp-k">가격 예측성</span><span class="cmp-v pos">높음 (자동 조정)</span></div>
+      <div class="cmp-row"><span class="cmp-k">수혜자</span><span class="cmp-v pos">ETH 보유자 전체</span></div>
+    </div>
+  </div>
+
+  <p class="prose">
+    2022년 The Merge로 PoS 전환이 완료되면서 이 구조는 더 강력해졌다.
+    기존 PoW에서는 채굴자 보상으로 <strong>하루 약 13,000 ETH, 연간 약 480만 ETH</strong>가
+    신규 발행됐다. PoS 전환 이후 발행량은 약 90% 줄었고, 네트워크가 활발하게
+    사용되는 시기에는 소각량이 발행량을 초과하는 디플레이션 구간이 발생한다.
+  </p>
+
+  <p class="prose">
+    커뮤니티가 <strong>'울트라사운드 머니(ultrasound money)'</strong>라고 부르는 이 상태는,
+    비트코인이 4년마다 반감기를 통해 공급을 줄이는 방식과 달리
+    네트워크 사용 자체가 공급을 줄이는 <strong>동적 희소성 메커니즘</strong>이다.
+  </p>
+
+  <div class="compare reveal">
+    <div class="cmp-card">
+      <div class="cmp-head">PoW 시절 (Merge 이전)</div>
+      <div class="cmp-row"><span class="cmp-k">일일 발행량</span><span class="cmp-v neg">~13,000 ETH</span></div>
+      <div class="cmp-row"><span class="cmp-k">연간 발행량</span><span class="cmp-v neg">~480만 ETH</span></div>
+      <div class="cmp-row"><span class="cmp-k">ETH 보유 수익</span><span class="cmp-v neg">없음</span></div>
+      <div class="cmp-row"><span class="cmp-k">에너지 소비</span><span class="cmp-v neg">기준 (100%)</span></div>
+    </div>
+    <div class="cmp-card on">
+      <div class="cmp-head">PoS 전환 이후</div>
+      <div class="cmp-row"><span class="cmp-k">일일 발행량</span><span class="cmp-v pos">~1,700 ETH</span></div>
+      <div class="cmp-row"><span class="cmp-k">연간 발행량</span><span class="cmp-v pos">~62만 ETH</span></div>
+      <div class="cmp-row"><span class="cmp-k">ETH 보유 수익</span><span class="cmp-v pos">연 3.3~3.8% (스테이킹)</span></div>
+      <div class="cmp-row"><span class="cmp-k">에너지 소비</span><span class="cmp-v pos">-99.95%</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 2. 플라이휠 ── -->
+<section id="flywheel">
+  <div class="sec-label">II. 선순환 구조</div>
+  <h2 class="sec-title">자기 강화<br><em>플라이휠</em></h2>
+  <div class="rule"></div>
+
+  <p class="prose">
+    JSH 코인을 직접 배포하면서 트랜잭션 하나가 어떻게 처리되는지를
+    손으로 확인한 적이 있다. 그때 처음으로 EIP-1559 소각 구조가
+    단순한 토크노믹스 설계가 아니라는 걸 실감했다.
+  </p>
+
+  <div class="flywheel reveal">
+    <div class="fw-item">
+      <div class="fw-dot">01</div>
+      <div class="fw-body">
+        <div class="fw-title">네트워크 성장</div>
+        <div class="fw-desc">온체인 활동 증가 → base fee 상승 → ETH 소각량 증가</div>
+      </div>
+    </div>
+    <div class="fw-item">
+      <div class="fw-dot">02</div>
+      <div class="fw-body">
+        <div class="fw-title">ETH 희소성 증가</div>
+        <div class="fw-desc">소각량이 발행량을 초과하는 구간 → 공급 감소 → 희소성 상승</div>
+      </div>
+    </div>
+    <div class="fw-item">
+      <div class="fw-dot">03</div>
+      <div class="fw-body">
+        <div class="fw-title">스테이킹 유인 강화</div>
+        <div class="fw-desc">ETH 보유 가치 상승 → 스테이킹 참여 증가 → 보유 유인 강화</div>
+      </div>
+    </div>
+    <div class="fw-item">
+      <div class="fw-dot">04</div>
+      <div class="fw-body">
+        <div class="fw-title">네트워크 보안 강화</div>
+        <div class="fw-desc">스테이킹 증가 → 검증인 증가 → 보안 강화 → 신뢰도 상승 → 네트워크 성장 (①로 순환)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 배너 ── -->
+<div class="banner">
+  <div class="banner-quote">
+    "블록체인은 에이전트에게<br>이념이 아니라 <em>에르고노믹스</em>다."
+  </div>
+</div>
+
+<!-- ── 3. 에이전트 ── -->
+<section id="agent">
+  <div class="sec-label">III. 에이전트 경제와 이더리움</div>
+  <h2 class="sec-title">에이전트는<br>여권이 없다.<br><em>하지만 지갑은 가질 수 있다.</em></h2>
+  <div class="rule"></div>
+
+  <p class="prose">
+    AI 에이전트가 경제 주체가 되는 세상에서 가장 먼저 해결해야 할 질문은 단순하다.
+    <strong>"에이전트는 어떻게 결제하는가?"</strong>
+  </p>
+
+  <p class="prose">
+    에이전트는 여권이 없다. 은행 계좌도 없다. KYC도 못 통과한다.
+    근데 지갑은 가질 수 있다. 이게 핵심이다.
+    에이전트는 24시간 작동하며 1초에 수만 번의 마이크로트랜잭션을 수행할 수 있다.
+    전통 금융 인프라는 이 수요를 처리할 수 없다.
+  </p>
+
+  <div class="stat-grid reveal">
+    <div class="stat-card">
+      <div class="stat-key">여권 · 은행계좌 · KYC</div>
+      <div class="stat-num" style="color:var(--red)">❌</div>
+      <div class="stat-desc">에이전트는 전통 금융 인프라에 접근 불가</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-key">블록체인 지갑</div>
+      <div class="stat-num" style="color:var(--green)">✓</div>
+      <div class="stat-desc">에이전트는 지갑을 가질 수 있다. 이것이 핵심</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-key">작동 시간</div>
+      <div class="stat-num">24/7</div>
+      <div class="stat-desc">은행 영업시간이라는 개념이 없다. 이더리움은 항상 열려 있다</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-key">초당 트랜잭션</div>
+      <div class="stat-num">수만 회</div>
+      <div class="stat-desc">마이크로트랜잭션을 처리할 수 있는 유일한 인프라</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 4. 에르고노믹스 ── -->
+<section id="ergonomics">
+  <div class="sec-label">IV. 에르고노믹스 매트릭스</div>
+  <h2 class="sec-title">인간에게 불편했던 것이<br><em>에이전트의 최적 인터페이스</em></h2>
+  <div class="rule"></div>
+
+  <p class="prose">
+    이더리움이 인간에게 불편하게 느껴졌던 특성들이 에이전트에게는 최적의 인터페이스가 된다.
+  </p>
+
+  <div class="matrix reveal">
+    <div class="matrix-cell head">Feature</div>
+    <div class="matrix-cell head">인간의 경험</div>
+    <div class="matrix-cell head">에이전트의 경험</div>
+
+    <div class="matrix-cell feature">Private Key 관리</div>
+    <div class="matrix-cell human">😰 공포스러움</div>
+    <div class="matrix-cell agent">✓ Native Identity</div>
+
+    <div class="matrix-cell feature">24/7 변동성</div>
+    <div class="matrix-cell human">😓 스트레스</div>
+    <div class="matrix-cell agent">✓ Constant Opportunity</div>
+
+    <div class="matrix-cell feature">스마트 컨트랙트</div>
+    <div class="matrix-cell human">😵 복잡함</div>
+    <div class="matrix-cell agent">✓ Callable APIs</div>
+
+    <div class="matrix-cell feature">은행 없는 결제</div>
+    <div class="matrix-cell human">❌ 불가능</div>
+    <div class="matrix-cell agent">✓ Permissionless</div>
+  </div>
+</section>
+
+<!-- ── 5. B2A ── -->
+<section id="b2a">
+  <div class="sec-label">V. 비즈니스 구조의 전환</div>
+  <h2 class="sec-title">B2C → B2B → B2A → <em>A2A</em></h2>
+  <div class="rule"></div>
+
+  <p class="prose">
+    비즈니스 구조는 B2C에서 B2B를 거쳐 B2A, 나아가 A2A로 전환될 것이다.
+    다음 고객은 얼굴이 없지만 <strong>선호도, 권한, 지갑</strong>을 갖는다.
+    그 지갑의 공통 원장이 이더리움이 될 수밖에 없다고 나는 본다.
+  </p>
+
+  <div class="flow reveal">
+    <div class="flow-item">
+      <div class="flow-tag">B2C</div>
+      <div class="flow-desc">소비자의 주의를 끈다</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-item">
+      <div class="flow-tag">B2B</div>
+      <div class="flow-desc">기업 예산을 확보한다</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-item">
+      <div class="flow-tag">B2A</div>
+      <div class="flow-desc">머신의 선호도를 얻는다</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-item active">
+      <div class="flow-tag">A2A</div>
+      <div class="flow-desc">자율 워크플로우에 참여한다</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 6. ERC-8126 · x402 ── -->
+<section id="puzzle">
+  <div class="sec-label">VI. 두 개의 퍼즐 조각</div>
+  <h2 class="sec-title">ERC-8126과 x402:<br><em>이미 만들어지고 있다</em></h2>
+  <div class="rule"></div>
+
+  <p class="prose">
+    이더리움 토크노믹스가 가장 발전된 형태라고 주장할 수 있는 또 다른 근거는,
+    에이전트 경제에 필요한 인프라가 이미 이더리움 위에서 구체적인 형태로
+    만들어지고 있다는 점이다.
+  </p>
+
+  <div class="tech-grid reveal">
+    <div class="tech-card">
+      <div class="tech-tag">ERC-8126 · Identity Layer</div>
+      <div class="tech-name">에이전트 신원 인증 표준</div>
+      <div class="tech-desc">
+        AI 에이전트의 온체인 신원 인증을 위한 표준.
+        eips.ethereum.org에서 직접 확인했다. 초안 단계지만,
+        영지식 증명(ZKP)이나 온체인 서명을 통해 에이전트에게
+        특정 권한을 안전하게 위임하는 메커니즘을 정의한다.
+        에이전트 경제의 Identity 레이어를 이더리움 수준에서 풀어가는 시도다.
+      </div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-tag">x402 · Payment Layer</div>
+      <div class="tech-name">30년간 비어 있던 코드</div>
+      <div class="tech-desc">
+        HTTP 상태코드 402는 1990년대 초 "Payment Required"를 위해
+        예약됐으나 30년 넘게 쓰인 적이 없었다.
+        당시의 결제 인프라로는 HTTP 레벨의 마이크로결제를 처리할 방법이
+        없었기 때문이다. 코인베이스가 이더리움 기반 x402 프로토콜을 발표하면서
+        이 공백을 처음으로 채웠다. 그 기반이 이더리움이다.
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-grid reveal">
+    <div class="stat-card">
+      <div class="stat-key">ERC-8126 역할</div>
+      <div class="stat-num" style="font-size:18px">Identity</div>
+      <div class="stat-desc">에이전트 신원 인증 (Who can act)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-key">x402 역할</div>
+      <div class="stat-num" style="font-size:18px">Money</div>
+      <div class="stat-desc">에이전트 결제 (How it pays)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-key">스마트컨트랙트 역할</div>
+      <div class="stat-num" style="font-size:18px">Markets</div>
+      <div class="stat-desc">에이전트 거래 실행 (Where it trades)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-key">EIP-1559 + PoS</div>
+      <div class="stat-num" style="font-size:18px">Governance</div>
+      <div class="stat-desc">에이전트 경제 거버넌스 (Who decides)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 7. 가격과 가치 ── -->
+<section id="gap">
+  <div class="sec-label">VII. 가격과 내재가치의 괴리</div>
+  <h2 class="sec-title">지금이<br><em>흥미로운 이유</em></h2>
+  <div class="rule"></div>
+
+  <p class="prose">
+    이더리움의 가격은 한동안 정체됐다. L2의 발달로 메인넷 수수료가 낮아지면서
+    소각량이 줄었고, 이는 단기적으로 ETH 가격에 부정적으로 작용했다.
+  </p>
+
+  <p class="prose">
+    그러나 이것은 오히려 이더리움 토크노믹스의 성숙도를 보여주는 지표라고 나는 해석한다.
+    수수료가 낮아진 것은 <strong>네트워크가 더 많은 사람과 에이전트를 수용할 수 있게 됐다</strong>는 의미다.
+    에이전트 시대가 본격화되면 트랜잭션 볼륨은 지금과 비교할 수 없을 만큼 폭발적으로 늘어날 것이다.
+    에이전트는 24시간 작동하며 인간과 달리 잠을 자지 않는다.
+    그 수요가 폭발하는 순간, EIP-1559 소각 메커니즘은 다시 강력하게 작동하기 시작할 것이다.
+  </p>
+
+  <p class="prose">
+    지금은 이더리움의 내재가치와 시장가격 사이에 괴리가 존재하는 시기다.
+    나는 현재 ETH를 직간접적으로 보유하고 있고, 이 괴리를 매일 체감한다.
+    에이전트 수요가 임계점을 넘는 순간 이 괴리가 어떻게 움직일지,
+    그 타이밍을 스스로 판단하는 것이 지금 내가 가장 흥미롭게 생각하는 부분이다.
+  </p>
+</section>
+
+<!-- ── 결론 ── -->
+<section id="conclusion">
+  <div class="sec-label">VIII. 결론</div>
+  <h2 class="sec-title">다음 10년은<br><em>에이전트를 온보딩</em>하는 시대</h2>
+  <div class="rule"></div>
+
+  <div class="conclusion reveal">
+    <p class="prose">
+      이더리움은 현재 가장 발전된 토크노믹스를 가진 프로젝트다.
+      EIP-1559의 수요 기반 소각 메커니즘, PoS 전환 이후의 울트라사운드 머니 구조,
+      스마트컨트랙트의 프로그래머블한 결제 레이어, ERC-8126을 통한 에이전트 신원 인증,
+      그리고 x402를 통해 30년간 비어 있던 인터넷 결제 레이어를 채우는 시도까지.
+      이 모든 것이 에이전트 경제라는 하나의 방향으로 수렴하고 있다.
+    </p>
+    <p class="prose">
+      크립토는 10년을 인간 사용자를 온보딩하는 데 썼다.
+      다음 10년은 에이전트를 온보딩하는 시대가 될 것이다.
+      그리고 그 에이전트들이 가장 필요로 하는 공통 원장이 이더리움이다.
+      나는 그렇게 본다.
+    </p>
+  </div>
+</section>
+
+<!-- ── 푸터 ── -->
+<footer>
+  <div class="footer-l">전선호 · 이더리움 토크노믹스 리서치 · 2026.06</div>
+  <div class="footer-r">Sources: Ethereum.org · eips.ethereum.org · Coinbase</div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('show');
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
